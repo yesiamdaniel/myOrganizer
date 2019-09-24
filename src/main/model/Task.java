@@ -4,16 +4,29 @@ import java.util.ArrayList;
 
 public class Task {
 
-    public static ArrayList<Task> allTasks = new ArrayList<>();
-    public String taskDescription;
+    private String taskDescription;
+    private boolean completed;
 
+    // Constructs the task
+    // EFFECTS: Constructs the task and sets its completion to false
     public Task(String taskDescription) {
         this.taskDescription = taskDescription;
-        allTasks.add(this);
+        this.completed = false;
     }
 
-    public void deleteTask() {
-        allTasks.remove(this);
-        System.out.println("Successfully removed " + this.taskDescription + " from the list");
+    // EFFECTS: Returns the task description
+    public String getTaskDescription() {
+        return this.taskDescription;
+    }
+
+    //EFFECTS: Returns the completion status of the task
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets the task completion status to the status given
+    public void setCompleted(boolean status) {
+        completed = status;
     }
 }
