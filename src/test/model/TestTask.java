@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTask {
@@ -10,7 +12,7 @@ public class TestTask {
     private Task task;
 
     @BeforeEach
-    void runBefore() {
+    void runBefore() throws IOException {
         taskManager = new TaskManager();
         taskManager.create("Wash the dishes");
     }
