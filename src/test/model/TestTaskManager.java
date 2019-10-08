@@ -3,7 +3,6 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,29 +12,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaskManager {
     private TaskManager taskManager;
-    private String identifier = "test";
-    private String fileName = "./data/test.txt";
+    private String choreFileName = "./data/choreData.txt";
 
     @BeforeEach
     void runBefore() throws IOException {
         taskManager = new TaskManager();
+        taskManager.reset();
     }
 
     @Test
-    void testCreate() throws IOException {
+    void testCreateChore() throws IOException {
         taskManager.create("Wash dishes");
         Task task1 = taskManager.getAllTasks().get(0);
 
-        taskManager.create("Take out garbage");
-        Task task2 = taskManager.getAllTasks().get(1);
+        Task c = new Chore("testing", "true", "12345678");
+        taskManager.addNewChore(c);
 
         assertTrue(taskManager.getAllTasks().contains(task1));
-        assertTrue(taskManager.getAllTasks().contains(task2));
+        assertTrue(taskManager.getAllTasks().contains(c));
 
     }
 
     @Test
-    void testDelete() throws IOException {
+    void testCreateHomework() throws IOException {
+        taskManager.create("CPSC 121", "Midterm Friday", "Friday");
+        Task task1 = taskManager.getAllTasks().get(0);
+
+
+        assertTrue(taskManager.getAllTasks().contains(task1));
+    }
+
+    @Test
+    void testDeleteChore() throws IOException {
         taskManager.create("Wash dishes");
         Task taskToDelete = taskManager.getAllTasks().get(0);
 
@@ -46,36 +54,45 @@ public class TestTaskManager {
     }
 
     @Test
+    void testDeleteHomework() throws IOException {
+        taskManager.create("CPSC 121", "Midterm Friday", "Friday");
+        Task taskToDelete = taskManager.getAllTasks().get(0);
+
+        assertTrue(taskManager.getAllTasks().contains(taskToDelete));
+
+        taskManager.delete(taskToDelete);
+        assertFalse(taskManager.getAllTasks().contains(taskToDelete));
+    }
+
+
+    @Test
     void testMarkAsCompleted() throws IOException {
-        Task taskToComplete = new Task("Wash dishes", identifier);
+        Task taskToComplete = new Chore("Wash dishes");
 
         taskManager.create("Wash dishes");
-        taskManager.markAsCompleted(taskToComplete);
+        taskToComplete.setCompleted(true);
         assertTrue(taskToComplete.isCompleted());
     }
 
     @Test
-    void testSave() throws IOException {
-        ArrayList<Task> taskList = createTaskArray();
-
-        taskManager.save(taskList, fileName);
-        assertEquals(2, Files.readAllLines(Paths.get(fileName)).size());
+    void testSaveChores() throws IOException {
+        taskManager.save(createChoreArray());
+        assertEquals(2, Files.readAllLines(Paths.get(choreFileName)).size());
     }
 
     @Test
     void testLoad() throws IOException {
-        taskManager.save(createTaskArray(), fileName);
-        taskManager.load(fileName);
+        taskManager.reset();
+        taskManager.save(createChoreArray());
+        taskManager.instantiateChores();
 
         assertEquals(2, taskManager.getAllTasks().size());
     }
 
-    // EFFECTS: add 2 test tasks to test file and returns those tasks as a list
-    private ArrayList<Task> createTaskArray() throws IOException {
-        FileWriter file = new FileWriter(fileName);
-        file.flush();
-        Task t = new Task("Wash the dishes", "test");
-        Task t2 = new Task("Do homework", "test2");
+    // EFFECTS: creates 2 tasks and returns those tasks as a list
+    private ArrayList<Task> createChoreArray() {
+        Task t = new Chore("Wash the dishes");
+        Task t2 = new Chore("Do homework");
         ArrayList<Task> taskList = new ArrayList<>();
         taskList.add(t);
         taskList.add(t2);
