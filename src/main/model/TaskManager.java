@@ -8,7 +8,7 @@ public class TaskManager extends DataHandler {
 
 
     private Scanner scanner = new Scanner(System.in);
-    private String choreFileName = "./data/choreData.txt";
+    private String choreFileName = "./data/choreDaa.txt";
 
     // EFFECTS: loads data then constructs separate lists for all current tasks of each category
     public TaskManager() throws IOException {
@@ -29,6 +29,19 @@ public class TaskManager extends DataHandler {
         Task newHomework = new Homework(className, description, dueDate);
         super.addNewHomework(newHomework);
         save(super.getAllHomework());
+    }
+
+    // EFFECTS: throws TooManyIncompleteException if there are more than 10 incomplete tasks
+    public void checkTooMany() throws TooManyIncompleteException {
+        int counter = 0;
+        for (Task t :super.getAllTasks()) {
+            if (!t.isCompleted()) {
+                counter++;
+            }
+        }
+        if (counter > 10) {
+            throw new TooManyIncompleteException();
+        }
     }
 
     // Removes a task from the to-do list

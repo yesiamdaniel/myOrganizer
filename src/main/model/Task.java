@@ -29,12 +29,12 @@ public abstract class Task implements Serializable {
     // REQUIRES: identifier to set must be 8 characters long
     // MODIFIES: this
     // EFFECTS: sets the identifier
-    public void setIdentifier(String identifier) {
+    void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
     // EFFECTS: returns the unique identifier for this task
-    public String getIdentifier() {
+    String getIdentifier() {
         return identifier;
     }
 
@@ -49,7 +49,7 @@ public abstract class Task implements Serializable {
         this.description = description;
     }
 
-    // REQUIRES: task type must be one of: Chore or School
+    // REQUIRES: task type must be one of: chore or homework
     // MODIFIES: this
     // EFFECTS: sets the task type
     public void setType(String type) {
@@ -74,5 +74,6 @@ public abstract class Task implements Serializable {
     // EFFECTS: prints out a description of the task to the console
     public abstract String getTaskDetails();
 
+    // EFFECTS: returns a list of strings with all the fields that define the task
     public abstract ArrayList<String> getAllFields();
 }

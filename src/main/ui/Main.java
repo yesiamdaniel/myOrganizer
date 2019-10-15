@@ -2,6 +2,7 @@ package ui;
 
 import model.Task;
 import model.TaskManager;
+import model.TooManyIncompleteException;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -11,6 +12,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[]args) throws IOException {
+        System.out.println("Initializing...");
         TaskManager taskManager = new TaskManager();
         handleInput(taskManager);
     }
@@ -69,6 +71,12 @@ public class Main {
 
     // Asks user what task they would like to create
     private static void createPrompt(TaskManager tm) throws IOException {
+        try {
+            tm.checkTooMany();
+        } catch (TooManyIncompleteException e) {
+            System.out.println("Cannot create: There are too many incomplete tasks!");
+            return;
+        }
         System.out.println("What kind of task would you like to create?\n"
                 + "[1] - Chore\n"
                 + "[2] - Homework\n");

@@ -3,6 +3,7 @@ package model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,10 +16,52 @@ public abstract class DataHandler implements Saveable, Loadable {
     private String choreFilename = "./data/choreData.txt";
     private String homeworkFilename = "./data/homeworkData.txt";
 
+    @Override
+    // EFFECTS: reformat data values stored in data file so it can be used
+    public ArrayList<String> handleData(String line) {
+        String[] fragment = line.split(" - ");
+        return new ArrayList<>(Arrays.asList(fragment));
+    }
+
+    @Override
+    // MODIFIES: this
+    // EFFECTS: saves task data into respective data file
+    public void save(ArrayList<Task> tasksToSave) throws IOException {
+        int iter = 1;
+        FileWriter file = null;
+        for (Task t: tasksToSave) {
+            String filename = "./data/" + t.getType() + "Data.txt";
+
+            while (iter == 1) {
+                file = clearFileAndReturn(filename);
+                iter = 0;
+            }
+
+            if (t.getType().equals("homework")) {
+                saveHomework(file, t);
+            }
+            if (t.getType().equals("chore")) {
+                saveChore(file, t);
+            }
+        }
+        if (file != null) {
+            file.close();
+        }
+    }
+
     // MODIFIES: this
     // EFFECTS: loads data and returns each line in a list
     public List<String> loadData(String fileName) throws IOException {
-        return Files.readAllLines(Paths.get(fileName));
+        try {
+            Files.readAllLines(Paths.get(fileName));
+        } catch (NoSuchFileException i) {
+            System.out.println("file Error encountered... Attempting to resolve...");
+            FileWriter file = new FileWriter(fileName);
+            file.close();
+            System.out.println("Successfully resolved!");
+        } finally {
+            return Files.readAllLines(Paths.get(fileName));
+        }
     }
 
     // REQUIRES: data must be formatted so that each field  is separated by " - "
@@ -113,40 +156,6 @@ public abstract class DataHandler implements Saveable, Loadable {
         return allTasks;
     }
 
-
-    @Override
-    // EFFECTS: reformat data values stored in data file so it can be used
-    public ArrayList<String> handleData(String line) {
-        String[] fragment = line.split(" - ");
-        return new ArrayList<>(Arrays.asList(fragment));
-    }
-
-    @Override
-    // MODIFIES: this
-    // EFFECTS: saves task data into respective data file
-    public void save(ArrayList<Task> tasksToSave) throws IOException {
-        int iter = 1;
-        FileWriter file = null;
-        for (Task t: tasksToSave) {
-            String filename = "./data/" + t.getType() + "Data.txt";
-
-            while (iter == 1) {
-                file = clearFileAndReturn(filename);
-                iter = 0;
-            }
-
-            if (t.getType().equals("homework")) {
-                saveHomework(file, t);
-            }
-            if (t.getType().equals("chore")) {
-                saveChore(file, t);
-            }
-        }
-        if (file != null) {
-            file.close();
-        }
-    }
-
     // REQUIRES: a predefined iterator field that is of type int and equal to 1
     // MODIFIES: data
     // EFFECTS: clears all contents of the given file and then returns it
@@ -193,5 +202,16 @@ public abstract class DataHandler implements Saveable, Loadable {
         new FileWriter(homeworkFilename);
         new FileWriter(choreFilename);
     }
+
+    // MODIFIES: this
+    // EFFECTS: clears all data
+    public void reset(String file) throws IOException {
+        allHomework.clear();
+        allChores.clear();
+
+        new FileWriter(homeworkFilename);
+        new FileWriter(choreFilename);
+    }
+
 }
 
