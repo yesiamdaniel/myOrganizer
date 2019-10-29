@@ -1,0 +1,167 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes for AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Zero Based Compressed Oops mode in which the Java heap is
+#     placed in the first 32GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 32GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (memory/allocation.inline.hpp:61), pid=20948, tid=0x00000000000050d0
+#
+# JRE version:  (8.0_222-b10) (build )
+# Java VM: OpenJDK 64-Bit Server VM (25.222-b10 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002f43800):  JavaThread "Unknown thread" [_thread_in_vm, id=20688, stack(0x0000000002c60000,0x0000000002d60000)]
+
+Stack: [0x0000000002c60000,0x0000000002d60000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002f43800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=20688, stack(0x0000000002c60000,0x0000000002d60000)]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x00000006c1200000, size: 4078 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x00000007c0000000
+
+Heap:
+ PSYoungGen      total 76288K, used 1310K [0x000000076b100000, 0x0000000770600000, 0x00000007c0000000)
+  eden space 65536K, 2% used [0x000000076b100000,0x000000076b247af0,0x000000076f100000)
+  from space 10752K, 0% used [0x000000076fb80000,0x000000076fb80000,0x0000000770600000)
+  to   space 10752K, 0% used [0x000000076f100000,0x000000076f100000,0x000000076fb80000)
+ ParOldGen       total 175104K, used 0K [0x00000006c1200000, 0x00000006cbd00000, 0x000000076b100000)
+  object space 175104K, 0% used [0x00000006c1200000,0x00000006c1200000,0x00000006cbd00000)
+ Metaspace       used 790K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 74K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x00000000124e0000,0x0000000012ce0000] byte_map_base: 0x000000000eed7000
+
+Marking Bits: (ParMarkBitMap*) 0x000000006a220e80
+ Begin Bits: [0x0000000013a30000, 0x00000000179e8000)
+ End Bits:   [0x00000000179e8000, 0x000000001b9a0000)
+
+Polling page: 0x0000000000bf0000
+
+CodeCache: size=245760Kb used=328Kb max_used=328Kb free=245431Kb
+ bounds [0x0000000003120000, 0x0000000003390000, 0x0000000012120000]
+ total_blobs=57 nmethods=0 adapters=38
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.039 loading class java/lang/Short
+Event: 0.039 loading class java/lang/Short done
+Event: 0.039 loading class java/lang/Integer
+Event: 0.039 loading class java/lang/Integer done
+Event: 0.039 loading class java/lang/Long
+Event: 0.039 loading class java/lang/Long done
+Event: 0.040 loading class java/lang/NullPointerException
+Event: 0.040 loading class java/lang/NullPointerException done
+Event: 0.040 loading class java/lang/ArithmeticException
+Event: 0.040 loading class java/lang/ArithmeticException done
+
+
+Dynamic libraries:
+0x00007ff6f25a0000 - 0x00007ff6f25d5000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\bin\java.exe
+0x00007ffe95980000 - 0x00007ffe95b6d000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffe95350000 - 0x00007ffe95403000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffe92700000 - 0x00007ffe92993000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffe95820000 - 0x00007ffe958c3000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffe94b40000 - 0x00007ffe94bde000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffe95480000 - 0x00007ffe9551e000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffe956f0000 - 0x00007ffe95812000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffe95520000 - 0x00007ffe956b7000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffe929a0000 - 0x00007ffe929c0000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffe946e0000 - 0x00007ffe94709000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffe92430000 - 0x00007ffe925c9000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffe92390000 - 0x00007ffe92430000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffe92290000 - 0x00007ffe9238a000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffe7eff0000 - 0x00007ffe7f269000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17763.802_none_05b1445c0722d2cc\COMCTL32.dll
+0x00007ffe94800000 - 0x00007ffe94b2c000 	C:\WINDOWS\System32\combase.dll
+0x00007ffe925d0000 - 0x00007ffe9264e000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffe956c0000 - 0x00007ffe956ee000 	C:\WINDOWS\System32\IMM32.DLL
+0x000000006b8c0000 - 0x000000006b992000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\msvcr100.dll
+0x0000000069a50000 - 0x000000006a29d000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\server\jvm.dll
+0x00007ffe95410000 - 0x00007ffe95418000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ffe7aa00000 - 0x00007ffe7aa09000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffe8f0f0000 - 0x00007ffe8f114000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffe94790000 - 0x00007ffe947fd000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffe7fea0000 - 0x00007ffe7feaa000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffe8f0c0000 - 0x00007ffe8f0ed000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffe92190000 - 0x00007ffe921da000 	C:\WINDOWS\System32\cfgmgr32.dll
+0x00007ffe8bec0000 - 0x00007ffe8becf000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\verify.dll
+0x00007ffe7c110000 - 0x00007ffe7c139000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\java.dll
+0x00007ffe75030000 - 0x00007ffe75065000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\jdwp.dll
+0x00007ffe878a0000 - 0x00007ffe878a8000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\npt.dll
+0x00007ffe7c0e0000 - 0x00007ffe7c103000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\instrument.dll
+0x00007ffe877d0000 - 0x00007ffe877e6000 	C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\bin\zip.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:59390,suspend=y,server=n -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\Users\danie\.IdeaIC2019.2\system\captureAgent\debugger-agent.jar -Dfile.encoding=UTF-8 
+java_command: com.intellij.rt.execution.junit.JUnitStarter -ideVersion5 -junit5 model.TestTaskManager
+java_class_path (initial): C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2.1\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2.1\plugins\junit\lib\junit-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2.1\plugins\junit\lib\junit5-rt.jar;C:\Users\danie\.m2\repository\org\junit\platform\junit-platform-launcher\1.4.2\junit-platform-launcher-1.4.2.jar;C:\Users\danie\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\danie\.m2\repository\org\junit\platform\junit-platform-engine\1.4.2\junit-platform-engine-1.4.2.jar;C:\Users\danie\.m2\repository\org\opentest4j\opentest4j\1.1.1\opentest4j-1.1.1.jar;C:\Users\danie\.m2\repository\org\junit\platform\junit-platform-commons\1.4.2\junit-platform-commons-1.4.2.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\charsets.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\access-bridge-64.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\cldrdata.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\dnsns.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\jaccess.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\jfxrt.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\localedata.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\nashorn.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\sunec.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\sunjce_provider.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\sunmscapi.jar;C:\Users\danie\OneDrive\Documents\Coding\JDK\Amazon Corretto\jdk1.8.0_222\jre\lib\ext\
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\danie\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\PyCharm Community Edition 2019.1.3\bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2.1\bin
+USERNAME=danie
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 17763 (10.0.17763.475)
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 142 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, rtm, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16700332k(6332532k free), swap 47683880k(5496k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.222-b10) for windows-amd64 JRE (1.8.0_222-b10), built on Jul 16 2019 06:06:11 by "Administrator" with MS VC++ 10.0 (VS2010)
+
+time: Tue Oct 29 00:29:03 2019
+timezone: Pacific Daylight Time
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

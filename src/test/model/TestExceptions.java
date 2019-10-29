@@ -1,5 +1,6 @@
 package model;
 
+import model.handler.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,24 +18,29 @@ public class TestExceptions {
     }
 
     @Test
-    void testTooManyIncompleteException() throws IOException {
-        try {
-            taskManager.checkTooMany();
-        } catch (TooManyIncompleteException e) {
-            fail();
-        }
-
+    void testThrowTooManyIncompleteException() throws IOException {
         populateTasks();
 
         try {
             taskManager.checkTooMany();
+            fail();
         } catch (TooManyIncompleteException e) {
             System.out.println("Success");
         }
     }
 
+    @Test
+    void testNotThrowTooManyIncompleteException() throws IOException {
+        try {
+            taskManager.checkTooMany();
+            System.out.println("Success");
+        } catch (TooManyIncompleteException e) {
+            fail();
+        }
+    }
+
     private void populateTasks() throws IOException {
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 11; i++) {
             taskManager.create("test");
         }
     }

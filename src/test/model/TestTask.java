@@ -1,5 +1,7 @@
 package model;
 
+import model.handler.TaskManager;
+import model.task.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

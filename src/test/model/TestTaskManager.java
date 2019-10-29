@@ -1,5 +1,8 @@
 package model;
 
+import model.handler.TaskManager;
+import model.task.Chore;
+import model.task.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -77,14 +80,13 @@ public class TestTaskManager {
     @Test
     void testSaveChores() throws IOException {
         taskManager.save(createChoreArray());
-        assertEquals(2, Files.readAllLines(Paths.get(choreFileName)).size());
+        assertEquals(10, Files.readAllLines(Paths.get(choreFileName)).size());
     }
 
     @Test
-    void testLoad() throws IOException {
-        taskManager.reset();
+    void testLoadChores() throws IOException {
         taskManager.save(createChoreArray());
-        taskManager.instantiateChores();
+        taskManager.load(choreFileName);
 
         assertEquals(2, taskManager.getAllTasks().size());
     }

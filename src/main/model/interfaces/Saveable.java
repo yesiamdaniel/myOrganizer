@@ -1,4 +1,6 @@
-package model;
+package model.interfaces;
+
+import model.task.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;

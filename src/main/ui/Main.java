@@ -1,7 +1,10 @@
 package ui;
 
-import model.Task;
-import model.TaskManager;
+import model.handler.urgencyhandlers.Important;
+import model.handler.urgencyhandlers.Normal;
+import model.handler.urgencyhandlers.Urgent;
+import model.task.Task;
+import model.handler.TaskManager;
 import model.TooManyIncompleteException;
 
 import java.io.IOException;
@@ -9,38 +12,52 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static TaskManager taskManager;
     private static Scanner scanner = new Scanner(System.in);
+    private static Urgent urgent;
+    private static Important important;
+    private static Normal normal;
 
     public static void main(String[]args) throws IOException {
-        System.out.println("Initializing...");
-        TaskManager taskManager = new TaskManager();
-        handleInput(taskManager);
+        initialize();
+        handleInput();
+    }
+
+    private static void initialize() throws IOException {
+        System.out.println("Initializing...\n");
+
+        taskManager = new TaskManager();
+        taskManager.init();
+
+        urgent = TaskManager.getUrgent();
+        important = TaskManager.getImportant();
+        normal = TaskManager.getNormal();
     }
 
     // EFFECTS: main handle for all major user interaction
-    private static void handleInput(TaskManager tm) throws IOException {
+    private static void handleInput() throws IOException {
         while (true) {
             System.out.println("All current Tasks:");
-            viewAllTasks(tm);
+            viewAllTasks();
             displayOptions();
             String optionSelected = scanner.nextLine();
-            if (interpretSelection(tm, optionSelected)) {
+            if (interpretSelection(optionSelected)) {
                 break;
             }
         }
     }
 
-    // EFFECTS: inteprets the selection the user made from handleInput. Returns true if user would like to quit,
+    // EFFECTS: interprets the selection the user made from handleInput. Returns true if user would like to quit,
     //          and returns false if user has entered an invalid input.
-    private static boolean interpretSelection(TaskManager tm, String optionSelected) throws IOException {
+    private static boolean interpretSelection(String optionSelected) throws IOException {
         if (optionSelected.equals("1")) {
-            createPrompt(tm);
+            createPrompt();
         } else if (optionSelected.equals("2")) {
-            deletePrompt(tm);
+            deletePrompt();
         } else if (optionSelected.equals("3")) {
-            handleAllTasks(tm);
+            handleAllTasks();
         } else if (optionSelected.equals("4")) {
-            tm.reset();
+            taskManager.reset();
         } else if (optionSelected.equals("q")) {
             return true;
         } else {
@@ -51,8 +68,8 @@ public class Main {
 
     // Displays all the home screen options
     // EFFECTS: Prints out a series of possible operations that a user can perform
-    public static void displayOptions() {
-        System.out.println("Welcome \n "
+    private static void displayOptions() {
+        System.out.println("\nWelcome \n "
                 + "To Create new task, press [1]\n "
                 + "To Delete a task press [2]\n "
                 + "To View all tasks press [3]\n "
@@ -61,36 +78,54 @@ public class Main {
     }
 
     // EFFECTS: prints all tasks
-    private static void viewAllTasks(TaskManager tm) {
+    private static void viewAllTasks() {
         int taskNumber = 1;
-        for (Task t : tm.getAllTasks()) {
-            System.out.println("Task number - " + taskNumber + " : " + t.getTaskDetails());
+        StringBuilder styleLinesSB = new StringBuilder();
+        for (int i = 0; i < 15; i++) {
+            styleLinesSB.append("==");
+        }
+        String styleLines = styleLinesSB.toString();
+        for (Task t : taskManager.getAllTasks()) {
+            System.out.println(styleLines + "\n"
+                    + "Task number - " + taskNumber + " :\n"
+                    + "  " + t.getTaskDetails() + "\n"
+                    + styleLines);
             taskNumber++;
         }
     }
 
     // Asks user what task they would like to create
-    private static void createPrompt(TaskManager tm) throws IOException {
+    private static void createPrompt() throws IOException {
         try {
-            tm.checkTooMany();
+            taskManager.checkTooMany();
         } catch (TooManyIncompleteException e) {
             System.out.println("Cannot create: There are too many incomplete tasks!");
             return;
         }
-        System.out.println("What kind of task would you like to create?\n"
-                + "[1] - Chore\n"
-                + "[2] - Homework\n");
+        printTaskTypes();
         String taskType = scanner.nextLine();
 
-        if (taskType.equals("1")) {
-            createChorePrompt(tm);
-        } else if (taskType.equals("2")) {
-            createHomeworkPrompt(tm);
+        if ("1".equals(taskType)) {
+            createChorePrompt();
+        } else if ("2".equals(taskType)) {
+            createHomeworkPrompt();
+        } else if ("q".equals(taskType)) {
+            return;
+        } else {
+            System.out.println("Invalid input, try again.");
+            createPrompt();
         }
     }
 
+    private static void printTaskTypes() {
+        System.out.println("What kind of task would you like to create?\n"
+                + "[1] - Chore\n"
+                + "[2] - Homework\n"
+                + "[q] go back\n");
+    }
+
     // EFFECTS: gathers user input to relay to homework constructor
-    private static void createHomeworkPrompt(TaskManager tm) throws IOException {
+    private static void createHomeworkPrompt() throws IOException {
         System.out.println("Enter class name: ");
         String className = scanner.nextLine();
         System.out.println("Enter homework description: ");
@@ -98,30 +133,62 @@ public class Main {
         System.out.println("Enter due date: ");
         String dueDate = scanner.nextLine();
         System.out.println("Adding: " + description + " for class " + className);
-        tm.create(className, description, dueDate);
+        taskManager.create(className, description, dueDate);
         System.out.println("Successfully added the task: " + description + ", to list");
     }
 
     // EFFECTS: gathers user input to relay to chore constructor
-    private static void createChorePrompt(TaskManager tm) throws IOException {
+    private static void createChorePrompt() throws IOException {
         System.out.println("Enter task description: ");
         String taskToAdd = scanner.nextLine();
+        Task taskAdded = taskManager.create(taskToAdd);
+
+        switchUrgency(taskAdded);
+
         System.out.println("Adding: " + taskToAdd);
-        tm.create(taskToAdd);
         System.out.println("Successfully added the task: " + taskToAdd + " to list");
+    }
+
+    // MODIFIES: taskAdded
+    // EFFECTS: assigns urgency to task
+    private static void switchUrgency(Task taskAdded) {
+        urgencyPrompt();
+        switch (scanner.nextLine()) {
+            case "1":
+                taskAdded.setUrgency(normal);
+                break;
+            case "2":
+                taskAdded.setUrgency(important);
+                break;
+            case "3":
+                taskAdded.setUrgency(urgent);
+                break;
+            default:
+                System.out.println("Inavlid input");
+                switchUrgency(taskAdded);
+        }
+    }
+
+    // EFFECTS: displays options for selecting urgency level
+    private static void urgencyPrompt() {
+        System.out.println("Select urgency level of task.\n"
+                + "[1] - Normal\n"
+                + "[2] - Important\n"
+                + "[3] - Urgent\n");
     }
 
     // Prompts user to select a task to delete
     // EFFECTS: determines the task to delete from user input
-    private static void deletePrompt(TaskManager tm) throws IOException {
+    private static void deletePrompt() throws IOException {
         while (true) {
             System.out.println("Which task would you like to delete?");
+            viewAllTasks();
             int taskIndexToDelete = Integer.parseInt(scanner.nextLine()) - 1;
 
-            if (0 <= taskIndexToDelete && taskIndexToDelete < tm.getAllTasks().size()) {
-                Task taskToDelete = tm.getAllTasks().get(taskIndexToDelete);
+            if (0 <= taskIndexToDelete && taskIndexToDelete < taskManager.getAllTasks().size()) {
+                Task taskToDelete = taskManager.getAllTasks().get(taskIndexToDelete);
                 if (confirmDelete(taskToDelete)) {
-                    tm.delete(taskToDelete);
+                    taskManager.delete(taskToDelete);
                     break;
                 }
             } else {
@@ -149,8 +216,8 @@ public class Main {
 
     // Prints out all the current tasks to the user
     // EFFECTS: prints out all current tasks to the user and handles marking tasks as completed
-    private static void handleAllTasks(TaskManager tm) {
-        viewAllTasks(tm);
+    private static void handleAllTasks() {
+        viewAllTasks();
         System.out.println("Enter task number to get more details or 'q' to go back to main menu");
         String result = scanner.nextLine();
 
@@ -158,17 +225,25 @@ public class Main {
             System.out.println("Returning to main menu");
         } else {
             Integer index = new Integer(result);
-            Task task = tm.getAllTasks().get(index - 1);
-            retrieveDetails(task);
-
-            System.out.println("Do you wish to make this task as completed? (y/n)");
-            String completedTaskPrompt = scanner.nextLine();
-            if (completedTaskPrompt.equals("y")) {
-                task.setCompleted(true);
-                System.out.println("Successfully marked as completed");
-            } else {
-                task.setCompleted(false);
+            try {
+                Task task = taskManager.getAllTasks().get(index - 1);
+                retrieveDetails(task);
+                markTaskCompletedPrompt(task);
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Invalid task number");
+                handleAllTasks();
             }
+        }
+    }
+
+    private static void markTaskCompletedPrompt(Task task) {
+        System.out.println("Do you wish to make this task as completed? (y/n)");
+        String completedTaskPrompt = scanner.nextLine();
+        if (completedTaskPrompt.equals("y")) {
+            task.setCompleted(true);
+            System.out.println("Successfully marked as completed");
+        } else {
+            task.setCompleted(false);
         }
     }
 
