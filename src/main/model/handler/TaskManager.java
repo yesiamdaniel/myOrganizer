@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class TaskManager extends DataHandler {
+    // Make public for tests
     static Urgent urgent;
     static Important important;
     static Normal normal;
@@ -84,7 +85,7 @@ public class TaskManager extends DataHandler {
         } else if (taskType.equals("homework")) {
             super.removeHomework(taskToDelete);
         }
-        taskToDelete.remove();
+        taskToDelete.removeUrgency();
         super.reloadData();
         System.out.println("Successfully removed " + taskToDelete.getDescription() + " from the list");
     }

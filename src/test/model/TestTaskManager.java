@@ -1,7 +1,13 @@
 package model;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Import;
 import model.handler.TaskManager;
+import model.handler.urgencyhandlers.Important;
+import model.handler.urgencyhandlers.Normal;
+import model.handler.urgencyhandlers.Urgency;
+import model.handler.urgencyhandlers.Urgent;
 import model.task.Chore;
+import model.task.Homework;
 import model.task.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestTaskManager {
     private TaskManager taskManager;
     private String choreFileName = "./data/choreData.txt";
+    private String homeworkFilename = "./data/homeworkData.txt";
 
     @BeforeEach
     void runBefore() throws IOException {
@@ -67,7 +74,6 @@ public class TestTaskManager {
         assertFalse(taskManager.getAllTasks().contains(taskToDelete));
     }
 
-
     @Test
     void testMarkAsCompleted() throws IOException {
         Task taskToComplete = new Chore("Wash dishes");
@@ -91,10 +97,27 @@ public class TestTaskManager {
         assertEquals(2, taskManager.getAllTasks().size());
     }
 
+    @Test
+    void testLoadHomework() throws IOException {
+        taskManager.save(createHomeworkArray());
+        taskManager.load(homeworkFilename);
+
+        assertEquals(2, taskManager.getAllTasks().size());
+    }
+
     // EFFECTS: creates 2 tasks and returns those tasks as a list
     private ArrayList<Task> createChoreArray() {
         Task t = new Chore("Wash the dishes");
         Task t2 = new Chore("Do homework");
+        ArrayList<Task> taskList = new ArrayList<>();
+        taskList.add(t);
+        taskList.add(t2);
+        return taskList;
+    }
+
+    private ArrayList<Task> createHomeworkArray() {
+        Task t = new Homework("test", "test", "1234");
+        Task t2 = new Homework("test2", "test2", "1234");
         ArrayList<Task> taskList = new ArrayList<>();
         taskList.add(t);
         taskList.add(t2);

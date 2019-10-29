@@ -35,9 +35,24 @@ public abstract class Task implements Serializable {
     // MODIFIES: this
     // EFFECTS: adds urgency handler to task and adds task to urgency handler
     public void setUrgency(Urgency u) {
-        if ((urgency == null) || !(urgency.equals(u))) {
+        if ((urgency == null)) {
             urgency = u;
             urgency.addTask(this);
+        } else if (!(urgency.equals(u))) {
+            urgency.removeTask(this);
+            urgency = u;
+            urgency.addTask(this);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes urgency from task
+    public void removeUrgency() {
+        if (urgency != null) {
+            if (urgency.getTasks().contains(this)) {
+                urgency.removeTask(this);
+                urgency = null;
+            }
         }
     }
 
@@ -55,7 +70,7 @@ public abstract class Task implements Serializable {
     // EFFECTS: returns urgency as string
     public String getUrgencyString() {
         if (!(urgency == null)) {
-            switch (urgency.getUrgencyString()) {
+            switch (urgency.getUrgency()) {
                 case IMPORTANT: return "important";
                 case URGENT: return "urgent";
                 default: return "normal";
@@ -88,14 +103,6 @@ public abstract class Task implements Serializable {
     //EFFECTS: Returns the completion status of the task
     public boolean isCompleted() {
         return completed;
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes task from urgency
-    public void remove() {
-        if (!(urgency == null)) {
-            urgency.removeTask(this);
-        }
     }
 
     @Override

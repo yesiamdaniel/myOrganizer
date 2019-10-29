@@ -12,7 +12,7 @@ public abstract class Urgency {
     private UrgencyLevels urgency;
 
     // EFFECTS: returns urgency level
-    public UrgencyLevels getUrgencyString() {
+    public UrgencyLevels getUrgency() {
         return urgency;
     }
 
@@ -27,7 +27,11 @@ public abstract class Urgency {
 
     public void removeTask(Task t) {
         tasks.remove(t);
-        t.setUrgency(null);
+        t.removeUrgency();
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 
     // MODIFIES: this
