@@ -1,11 +1,7 @@
 package model;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Import;
+
 import model.handler.TaskManager;
-import model.handler.urgencyhandlers.Important;
-import model.handler.urgencyhandlers.Normal;
-import model.handler.urgencyhandlers.Urgency;
-import model.handler.urgencyhandlers.Urgent;
 import model.task.Chore;
 import model.task.Homework;
 import model.task.Task;
