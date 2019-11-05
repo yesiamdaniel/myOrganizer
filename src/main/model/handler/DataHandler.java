@@ -243,7 +243,6 @@ public abstract class DataHandler implements Saveable, Loadable {
         }
     }
 
-
     // EFFECTS: returns a list of all current chores
     ArrayList<Task> getAllChores() {
         return allChores;

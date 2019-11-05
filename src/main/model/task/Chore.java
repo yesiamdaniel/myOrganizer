@@ -43,11 +43,18 @@ public class Chore extends Task {
 
 
     @Override
+    // Semantic coupling with homework.getTaskDetails
+//    public String getTaskDetails() {
+//        return "*Chore*\n"
+//                + "   " + getDescription() + "\n"
+//                + "   Completed?: " + isCompleted() + "\n"
+//                + "   Urgency: " + getUrgency().warn();
+//    }
     public String getTaskDetails() {
         return "*Chore*\n"
-                + "   " + getDescription() + "\n"
-                + "   Completed?: " + isCompleted() + "\n"
-                + "   Urgency: " + getUrgency().warn();
+                + space + getDescription() + "\n"
+                + space + "Completed?: " + isCompleted() + "\n"
+                + space + "Urgency: " + getUrgency().warn();
     }
 
     @Override

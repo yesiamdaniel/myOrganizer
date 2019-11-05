@@ -45,11 +45,18 @@ public class Homework extends Task {
     }
 
     @Override
+    // Semantic coupling with Chore
+//    public String getTaskDetails() {
+//        return "*Homework*\n "
+//                + "  " + className + " - " + getDescription() + "\n"
+//                + "   Due: " + dueDate
+//                + "   Urgency: " + getUrgency().warn();
+//   }
     public String getTaskDetails() {
         return "*Homework*\n "
-                + "  " + className + " - " + getDescription() + "\n"
-                + "   Due: " + dueDate
-                + "   Urgency: " + getUrgency().warn();
+                + space + className + " - " + getDescription() + "\n"
+                + space + "Due: " + dueDate
+                + space + "Urgency: " + getUrgency().warn();
     }
 
     @Override

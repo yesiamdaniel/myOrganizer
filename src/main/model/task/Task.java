@@ -12,6 +12,7 @@ public abstract class Task implements Serializable {
     private String identifier;
     private String type;
     private Urgency urgency;
+    protected String space = "   ";
 
     // MODIFIES: this
     // EFFECTS: sets the identifier to a random 8 character alphanumeric string
