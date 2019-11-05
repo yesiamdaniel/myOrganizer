@@ -10,6 +10,7 @@ import model.task.Task;
 import model.TooManyIncompleteException;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TaskManager extends DataHandler {
@@ -49,7 +50,7 @@ public class TaskManager extends DataHandler {
     public Task create(String taskDescription) throws IOException {
         Task newChore = new Chore(taskDescription);
         super.addNewChore(newChore);
-        save(super.getAllChores());
+        save(getAllChores());
         return newChore;
     }
 
@@ -58,14 +59,14 @@ public class TaskManager extends DataHandler {
     public Task create(String className, String description, String dueDate) throws IOException {
         Task newHomework = new Homework(className, description, dueDate);
         super.addNewHomework(newHomework);
-        save(super.getAllHomework());
+        save(getAllHomework());
         return newHomework;
     }
 
     // EFFECTS: throws TooManyIncompleteException if there are more than 10 incomplete tasks
     public void checkTooMany() throws TooManyIncompleteException {
         int counter = 0;
-        for (Task t :super.getAllTasks()) {
+        for (Task t :getAllTasks()) {
             if (!t.isCompleted()) {
                 counter++;
             }
@@ -86,8 +87,38 @@ public class TaskManager extends DataHandler {
             super.removeHomework(taskToDelete);
         }
         taskToDelete.removeUrgency();
-        super.reloadData();
+        reloadData();
         System.out.println("Successfully removed " + taskToDelete.getDescription() + " from the list");
+    }
+
+    // EFFECTS: returns a list of all current chores
+    ArrayList<Task> getAllChores() {
+        return allChores;
+    }
+
+    // EFFECTS: returns a list of all current homework
+    ArrayList<Task> getAllHomework() {
+        return allHomework;
+    }
+
+    // EFFECTS: returns list of all current tasks
+    public ArrayList<Task> getAllTasks() {
+        ArrayList<Task> allTasks = new ArrayList<>();
+        allTasks.addAll(allChores);
+        allTasks.addAll(allHomework);
+
+        return allTasks;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: saves the current state of tasks in the data file then reloads the taskmanager data
+    void reloadData() throws IOException {
+        save(getAllTasks());
+        allHomework.clear();
+        allChores.clear();
+
+        load(choreFilename);
+        load(homeworkFilename);
     }
 
 

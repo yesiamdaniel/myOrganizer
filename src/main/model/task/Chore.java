@@ -21,8 +21,6 @@ public class Chore extends Task {
 
         super.setIdentifier(uid);
         super.setType("chore");
-
-
     }
 
     @Override

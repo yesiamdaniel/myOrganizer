@@ -133,7 +133,10 @@ public class Main {
         System.out.println("Enter due date: ");
         String dueDate = scanner.nextLine();
         System.out.println("Adding: " + description + " for class " + className);
-        taskManager.create(className, description, dueDate);
+
+        Task taskAdded = taskManager.create(className, description, dueDate);
+        switchUrgency(taskAdded);
+
         System.out.println("Successfully added the task: " + description + ", to list");
     }
 

@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DataHandler implements Saveable, Loadable {
-    private ArrayList<Task> allChores = new ArrayList<>();
-    private ArrayList<Task> allHomework = new ArrayList<>();
+    protected ArrayList<Task> allChores = new ArrayList<>();
+    protected ArrayList<Task> allHomework = new ArrayList<>();
 
     String choreFilename = "./data/choreData.txt";
     String homeworkFilename = "./data/homeworkData.txt";
@@ -243,24 +243,25 @@ public abstract class DataHandler implements Saveable, Loadable {
         }
     }
 
+    // Dont belong here
     // EFFECTS: returns a list of all current chores
-    ArrayList<Task> getAllChores() {
-        return allChores;
-    }
+//    ArrayList<Task> getAllChores() {
+//        return allChores;
+//    }
 
-    // EFFECTS: returns a list of all current homework
-    ArrayList<Task> getAllHomework() {
-        return allHomework;
-    }
+//    // EFFECTS: returns a list of all current homework
+//    ArrayList<Task> getAllHomework() {
+//        return allHomework;
+//    }
 
-    // EFFECTS: returns list of all current tasks
-    public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(allChores);
-        allTasks.addAll(allHomework);
-
-        return allTasks;
-    }
+//    // EFFECTS: returns list of all current tasks
+//    public ArrayList<Task> getAllTasks() {
+//        ArrayList<Task> allTasks = new ArrayList<>();
+//        allTasks.addAll(allChores);
+//        allTasks.addAll(allHomework);
+//
+//        return allTasks;
+//    }
 
     // REQUIRES: a predefined iterator field that is of type int and equal to 1
     // MODIFIES: data
@@ -271,16 +272,17 @@ public abstract class DataHandler implements Saveable, Loadable {
         return newFile;
     }
 
-    // MODIFIES: this
-    // EFFECTS: saves the current state of tasks in the data file then reloads the data from the file
-    void reloadData() throws IOException {
-        save(getAllTasks());
-        allHomework.clear();
-        allChores.clear();
-
-        load(choreFilename);
-        load(homeworkFilename);
-    }
+    // Doesnt belong here
+//    // MODIFIES: this
+//    // EFFECTS: saves the current state of tasks in the data file then reloads the data from the file
+//    void reloadData() throws IOException {
+//        save(getAllTasks());
+//        allHomework.clear();
+//        allChores.clear();
+//
+//        load(choreFilename);
+//        load(homeworkFilename);
+//    }
 
     // MODIFIES: this
     // EFFECTS: clears all data

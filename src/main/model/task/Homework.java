@@ -53,9 +53,10 @@ public class Homework extends Task {
 //                + "   Urgency: " + getUrgency().warn();
 //   }
     public String getTaskDetails() {
-        return "*Homework*\n "
+        return "*Homework*\n"
                 + space + className + " - " + getDescription() + "\n"
-                + space + "Due: " + dueDate
+                + space + "Due: " + dueDate + "\n"
+                + space + "Completed?: " + isCompleted() + "\n"
                 + space + "Urgency: " + getUrgency().warn();
     }
 
