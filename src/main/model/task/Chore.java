@@ -1,6 +1,6 @@
 package model.task;
 
-import com.sun.istack.internal.NotNull;
+
 import model.DateTime;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class Chore extends Task {
 //    }
 
     // Constructs brand new chore given description and datetime
-    public Chore(String taskDescription, @NotNull DateTime dateTime) {
+    public Chore(String taskDescription, DateTime dateTime) {
         super.setDescription(taskDescription);
         createIdentifier();
         super.setType("chore");
