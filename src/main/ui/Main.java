@@ -1,16 +1,12 @@
 package ui;
 
 import model.DateTime;
-import model.handler.urgencyhandlers.Important;
-import model.handler.urgencyhandlers.Normal;
-import model.handler.urgencyhandlers.Urgent;
-import model.network.Weather;
+import network.Weather;
 import model.task.Task;
 import model.handler.TaskManager;
 import model.TooManyIncompleteException;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {

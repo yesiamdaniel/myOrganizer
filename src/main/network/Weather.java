@@ -1,4 +1,4 @@
-package model.network;
+package network;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
