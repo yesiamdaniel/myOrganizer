@@ -1,22 +1,25 @@
 package ui;
 
+import model.DateTime;
 import model.handler.urgencyhandlers.Important;
 import model.handler.urgencyhandlers.Normal;
 import model.handler.urgencyhandlers.Urgent;
+import model.network.Weather;
 import model.task.Task;
 import model.handler.TaskManager;
 import model.TooManyIncompleteException;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {
 
     private static TaskManager taskManager;
     private static Scanner scanner = new Scanner(System.in);
-    private static Urgent urgent;
-    private static Important important;
-    private static Normal normal;
+    private static DateTime dateTime;
+    private static Weather weather;
+    private static String city = "vancouver";
 
     public static void main(String[]args) throws IOException {
         initialize();
@@ -28,18 +31,20 @@ public class Main {
 
         taskManager = new TaskManager();
         taskManager.init();
+        dateTime = new DateTime();
+        weather = new Weather(city);
 
-        urgent = TaskManager.getUrgent();
-        important = TaskManager.getImportant();
-        normal = TaskManager.getNormal();
     }
 
-    // EFFECTS: main handle for all major user interaction
+    // EFFECTS: main loop for all major user interaction
     private static void handleInput() throws IOException {
         while (true) {
             System.out.println("All current Tasks:");
             viewAllTasks();
+
+            greeting();
             displayOptions();
+
             String optionSelected = scanner.nextLine();
             if (interpretSelection(optionSelected)) {
                 break;
@@ -47,8 +52,16 @@ public class Main {
         }
     }
 
+    // EFFECTS: prints welcome message and displays temperature
+    private static void greeting() {
+        System.out.println("Welcome back!\n"
+                + "It is " + dateTime.getCurrentDate() + "\n"
+                + "The current time is " + dateTime.getCurrentTime() + "\n"
+                + weather.createWeatherReport() + "\n");
+    }
+
     // EFFECTS: interprets the selection the user made from handleInput. Returns true if user would like to quit,
-    //          and returns false if user has entered an invalid input.
+    //          and returns false otherwise
     private static boolean interpretSelection(String optionSelected) throws IOException {
         if (optionSelected.equals("1")) {
             createPrompt();
@@ -60,38 +73,62 @@ public class Main {
             taskManager.reset();
         } else if (optionSelected.equals("q")) {
             return true;
+        } else if (optionSelected.equals("c")) {
+            changeCityPrompt();
         } else {
             System.out.println("Invalid input");
         }
         return false;
     }
 
+    private static void changeCityPrompt() {
+        System.out.println("Enter city name or press q to go back: ");
+        String newCity = scanner.nextLine();
+        if (weather.isCityValid(newCity)) {
+            weather.getWeather(newCity);
+            weather.createWeatherReport();
+        } else if (newCity.equals("q")) {
+            return;
+        } else {
+            System.out.println("Invalid input, Try again.");
+            changeCityPrompt();
+        }
+    }
+
     // Displays all the home screen options
     // EFFECTS: Prints out a series of possible operations that a user can perform
     private static void displayOptions() {
-        System.out.println("\nWelcome \n "
-                + "To Create new task, press [1]\n "
+        System.out.println("To Create new task, press [1]\n "
                 + "To Delete a task press [2]\n "
                 + "To View all tasks press [3]\n "
                 + "To reset the organizer press [4]\n "
-                + "To QUIT press [q]");
+                + "To QUIT press [q]\n "
+                + "To Change city press [c]");
     }
 
     // EFFECTS: prints all tasks
     private static void viewAllTasks() {
         int taskNumber = 1;
-        StringBuilder styleLinesSB = new StringBuilder();
-        for (int i = 0; i < 15; i++) {
-            styleLinesSB.append("==");
-        }
-        String styleLines = styleLinesSB.toString();
+        String lineSeparator = lineSeparators();
+
         for (Task t : taskManager.getAllTasks()) {
-            System.out.println(styleLines + "\n"
-                    + "Task number - " + taskNumber + " :\n"
+            if (taskNumber == 1) {
+                System.out.println(lineSeparator);
+            }
+            System.out.println("Task number - " + taskNumber + " :\n"
                     + "  " + t.getTaskDetails() + "\n"
-                    + styleLines);
+                    + lineSeparator);
             taskNumber++;
         }
+        System.out.println("\n");
+    }
+
+    private static String lineSeparators() {
+        StringBuilder styleLinesSB = new StringBuilder();
+        for (int i = 0; i < 25; i++) {
+            styleLinesSB.append("==");
+        }
+        return styleLinesSB.toString();
     }
 
     // Asks user what task they would like to create
@@ -128,14 +165,17 @@ public class Main {
     private static void createHomeworkPrompt() throws IOException {
         System.out.println("Enter class name: ");
         String className = scanner.nextLine();
+
         System.out.println("Enter homework description: ");
         String description = scanner.nextLine();
-        System.out.println("Enter due date: ");
-        String dueDate = scanner.nextLine();
-        System.out.println("Adding: " + description + " for class " + className);
 
-        Task taskAdded = taskManager.create(className, description, dueDate);
+        DateTime dateTime = dueDatePrompt();
+
+
+        Task taskAdded = taskManager.create(className, description, dateTime);
         switchUrgency(taskAdded);
+
+        System.out.println("Adding: " + description + " for class " + className + "\n");
 
         System.out.println("Successfully added the task: " + description + ", to list");
     }
@@ -144,27 +184,80 @@ public class Main {
     private static void createChorePrompt() throws IOException {
         System.out.println("Enter task description: ");
         String taskToAdd = scanner.nextLine();
-        Task taskAdded = taskManager.create(taskToAdd);
+        DateTime dateTime = dueDatePrompt();
+        Task taskAdded = taskManager.create(taskToAdd, dateTime);
 
         switchUrgency(taskAdded);
 
         System.out.println("Adding: " + taskToAdd);
-        System.out.println("Successfully added the task: " + taskToAdd + " to list");
+        System.out.println("Successfully added the task: " + taskToAdd + " to list\n");
+    }
+
+    // EFFECTS: Asks user if they would like to set a due date for their task
+    private static DateTime dueDatePrompt() {
+        System.out.println("Does this task have a due date? (y/n)");
+
+        while (true) {
+            String userInput = scanner.nextLine();
+            if (userInput.equals("y")) {
+                DateTime dateTime = new DateTime();
+                getDueDate(dateTime);
+                return dateTime;
+            } else if (userInput.equals("n")) {
+                return new DateTime();
+            } else {
+                System.out.println("Inablid input, Try again");
+            }
+        }
+    }
+
+    // REQUIRES: user must enter due date in from: yyyy-MM-dd
+    // MODIFIES: dateTime
+    // EFFECTS: Gets due date from user
+    private static void getDueDate(DateTime dateTime) {
+        System.out.println("Enter due date (yyyy-MM-dd): ");
+
+        String dueDate = scanner.nextLine();
+        try {
+            dateTime.setDate(dueDate);
+            getDueTime(dateTime);
+        } catch (Exception e) {
+            System.out.println("Invalid input. Try again");
+            getDueDate(dateTime);
+        }
+    }
+
+    // REQUIRES: user must enter time in form: h:mm a
+    // MODIFIES: dateTime
+    // EFFECTS: Asks user if dueDate has a time. If yes gets due time from user otherwise returns
+    private static void getDueTime(DateTime dateTime) {
+        System.out.println("Does this task have a due time? (y/n)");
+        if (scanner.nextLine().equals("y")) {
+            System.out.println("Enter due time (h:mm AM/PM): ");
+
+            String duetTime = scanner.nextLine();
+            try {
+                dateTime.setTime(duetTime);
+            } catch (Exception e) {
+                System.out.println("Invalid input. Try again");
+                getDueTime(dateTime);
+            }
+        }
     }
 
     // MODIFIES: taskAdded
     // EFFECTS: assigns urgency to task
-    private static void switchUrgency(Task taskAdded) {
+    private static void switchUrgency(Task taskAdded) throws IOException {
         urgencyPrompt();
         switch (scanner.nextLine()) {
             case "1":
-                taskAdded.setUrgency(normal);
+                taskAdded.setUrgency(TaskManager.getNormal());
                 break;
             case "2":
-                taskAdded.setUrgency(important);
+                taskAdded.setUrgency(TaskManager.getImportant());
                 break;
             case "3":
-                taskAdded.setUrgency(urgent);
+                taskAdded.setUrgency(TaskManager.getUrgent());
                 break;
             default:
                 System.out.println("Inavlid input");
@@ -177,7 +270,7 @@ public class Main {
         System.out.println("Select urgency level of task.\n"
                 + "[1] - Normal\n"
                 + "[2] - Important\n"
-                + "[3] - Urgent\n");
+                + "[3] - Urgent");
     }
 
     // Prompts user to select a task to delete
@@ -230,12 +323,33 @@ public class Main {
             Integer index = new Integer(result);
             try {
                 Task task = taskManager.getAllTasks().get(index - 1);
-                retrieveDetails(task);
+                System.out.println(task.getTaskDetails());
                 markTaskCompletedPrompt(task);
+                changeUrgencyPrompt(task);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Invalid task number");
                 handleAllTasks();
             }
+        }
+    }
+
+    // EFFECTS: Prompt to change urgency
+    private static void changeUrgencyPrompt(Task task) {
+        System.out.println("Do you wish to change the urgency of this task? (y/n)");
+        String userPrompt = scanner.nextLine();
+        if (userPrompt.equals("y")) {
+            try {
+                switchUrgency(task);
+                System.out.println("Successfully changed urgency to " + task.getUrgencyString() + "\n");
+            } catch (Exception e) {
+                System.out.println("Switch urgency ERROR");
+                System.exit(-1);
+            }
+        } else if (userPrompt.equals("n")) {
+            return;
+        } else {
+            System.out.println("Invalid input, Try again.");
+            changeUrgencyPrompt(task);
         }
     }
 
@@ -248,11 +362,6 @@ public class Main {
         } else {
             task.setCompleted(false);
         }
-    }
-
-    // EFFECTS: Prints the details of the task, then prompts the user if they want to mark it as completed
-    private static void retrieveDetails(Task task) {
-        String taskDetails = task.getTaskDetails();
     }
 }
 

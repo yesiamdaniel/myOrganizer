@@ -1,19 +1,33 @@
 package model.task;
 
+import com.sun.istack.internal.NotNull;
+import model.DateTime;
+
 import java.util.HashMap;
 
 public class Chore extends Task {
 
+    // TODO: remove from tests
     // Constructs brand new chore
-    public Chore(String taskDescription) {
+//    public Chore(String taskDescription) {
+//        super.setDescription(taskDescription);
+//        createIdentifier();
+//        super.setType("chore");
+//    }
+
+    // Constructs brand new chore given description and datetime
+    public Chore(String taskDescription, @NotNull DateTime dateTime) {
         super.setDescription(taskDescription);
         createIdentifier();
         super.setType("chore");
+        setDateTime(dateTime);
     }
 
     // Constructs chore from file
-    public Chore(String taskDescription, String completed, String uid) {
+    // REQUIRES: dueDate in form yyyy-MM-dd, dueTime in form hh:mm (24 time)
+    public Chore(String taskDescription, String dueDate, String dueTime, String completed, String uid) {
         super.setDescription(taskDescription);
+        super.setDateTime(dueDate, dueTime);
 
         if (completed.equals("true")) {
             super.setCompleted(true);
@@ -39,18 +53,10 @@ public class Chore extends Task {
         setIdentifier(sb.toString());
     }
 
-
-    @Override
-    // Semantic coupling with homework.getTaskDetails
-//    public String getTaskDetails() {
-//        return "*Chore*\n"
-//                + "   " + getDescription() + "\n"
-//                + "   Completed?: " + isCompleted() + "\n"
-//                + "   Urgency: " + getUrgency().warn();
-//    }
     public String getTaskDetails() {
         return "*Chore*\n"
                 + space + getDescription() + "\n"
+                + space + "Do by: " + dueDateFormat() + "\n"
                 + space + "Completed?: " + isCompleted() + "\n"
                 + space + "Urgency: " + getUrgency().warn();
     }
@@ -60,8 +66,12 @@ public class Chore extends Task {
         HashMap<String, String> map = new HashMap<>();
         map.put("uid", getIdentifier());
         map.put("description", getDescription());
+
+        mapDateTime(map);
+
         map.put("completed", String.valueOf(isCompleted()));
         map.put("urgency", getUrgencyString());
+
 
         return map;
     }

@@ -1,30 +1,35 @@
 package model.task;
 
+import model.DateTime;
+
 import java.util.HashMap;
 
 public class Homework extends Task {
     private String className;
-    private String dueDate;
 
     // Constructs a brand new homework object from no previous data
-    public Homework(String className, String description, String dueDate) {
+    public Homework(String className, String description, DateTime dateTime) {
         this.className = className;
-        this.dueDate = dueDate;
         super.setDescription(description);
         createIdentifier();
+        setDateTime(dateTime);
         super.setType("homework");
     }
 
-    // Constructs a brand new homework object from no previous data
-    public Homework(String className, String description, String dueDate, String completed, String uid) {
+    // Constructs homework object from data
+    public Homework(String uid, String className, String description,
+                    String dueDate, String dueTime, String completed) {
+        super.setIdentifier(uid);
         this.className = className;
-        this.dueDate = dueDate;
+        super.setDescription(description);
+
+        setDateTime(dueDate, dueTime);
 
         if (completed.equals("true")) {
             super.setCompleted(true);
         }
-        super.setDescription(description);
-        super.setIdentifier(uid);
+
+
         super.setType("homework");
     }
 
@@ -44,21 +49,15 @@ public class Homework extends Task {
         setIdentifier(sb.toString());
     }
 
-    @Override
-    // Semantic coupling with Chore
-//    public String getTaskDetails() {
-//        return "*Homework*\n "
-//                + "  " + className + " - " + getDescription() + "\n"
-//                + "   Due: " + dueDate
-//                + "   Urgency: " + getUrgency().warn();
-//   }
     public String getTaskDetails() {
         return "*Homework*\n"
                 + space + className + " - " + getDescription() + "\n"
-                + space + "Due: " + dueDate + "\n"
+                + space + "Due: " + dueDateFormat() + "\n"
                 + space + "Completed?: " + isCompleted() + "\n"
                 + space + "Urgency: " + getUrgency().warn();
     }
+
+
 
     @Override
     public HashMap<String, String> getAllFields() {
@@ -66,10 +65,14 @@ public class Homework extends Task {
         map.put("uid", getIdentifier());
         map.put("description", getDescription());
         map.put("className", className);
-        map.put("dueDate", dueDate);
+
+        mapDateTime(map);
+
         map.put("completed", String.valueOf(isCompleted()));
         map.put("urgency", getUrgencyString());
 
         return map;
     }
+
+
 }

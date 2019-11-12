@@ -41,7 +41,7 @@ public class TestExceptions {
 
     private void populateTasks() throws IOException {
         for(int i = 0; i < 11; i++) {
-            taskManager.create("test");
+            taskManager.create("test", new DateTime());
         }
     }
 }

@@ -2,6 +2,7 @@ package model.handler.urgencyhandlers;
 
 import model.task.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public abstract class Urgency {
 
     // MODIFIES: this
     // EFFECTS: add task to urgentTasks and assigns this urgency handler to the task
-    public void addTask(Task t) {
+    public void addTask(Task t) throws IOException {
         if ((!tasks.contains(t))) {
             tasks.add(t);
             t.setUrgency(this);

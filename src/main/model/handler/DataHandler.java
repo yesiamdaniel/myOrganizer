@@ -4,6 +4,7 @@ import model.handler.urgencyhandlers.Urgency;
 import model.handler.urgencyhandlers.Urgent;
 import model.interfaces.Loadable;
 import model.interfaces.Saveable;
+import model.observer.Observer;
 import model.task.Chore;
 import model.task.Homework;
 import model.task.Task;
@@ -29,26 +30,34 @@ public abstract class DataHandler implements Saveable, Loadable {
 
     // EFFECTS: saves task data into respective data file
     public void save(ArrayList<Task> tasksToSave) throws IOException {
-        int iter = 1;
-        FileWriter file = null;
+        FileWriter homeworkFile = new FileWriter(homeworkFilename);
+        FileWriter choreFile = new FileWriter(choreFilename);
+
         for (Task t: tasksToSave) {
-            String filename = "./data/" + t.getType() + "Data.txt";
-
-            while (iter == 1) {
-                file = clearFileAndReturn(filename);
-                iter = 0;
-            }
-
             if (t.getType().equals("homework")) {
-                saveHomework(file, t);
+                saveHomework(homeworkFile, t);
             }
             if (t.getType().equals("chore")) {
-                saveChore(file, t);
+                saveChore(choreFile, t);
             }
         }
-        if (file != null) {
-            file.close();
+        homeworkFile.close();
+        choreFile.close();
+    }
+
+
+    // EFFECTS: saves a single task into respective data file
+    public void save(Task taskToSave) throws IOException {
+        String filename = "./data/" + taskToSave.getType() + "Data.txt";
+        FileWriter file = new FileWriter(filename);
+
+        if (taskToSave.getType().equals("homework")) {
+            saveHomework(file, taskToSave);
         }
+        if (taskToSave.getType().equals("chore")) {
+            saveChore(file, taskToSave);
+        }
+        file.close();
     }
 
     // MODIFIES: file
@@ -58,14 +67,18 @@ public abstract class DataHandler implements Saveable, Loadable {
 
         String uid = fields.get("uid");
         String description = fields.get("description");
+        String dueDate = fields.get("dueDate");
+        String dueTime = fields.get("dueTime");
         String completed = fields.get("completed");
         String urgency = fields.get("urgency");
 
         file.write(">>>\n"
-                + "uid:" + uid
-                + "\ndescription:" + description
-                + "\ncompleted:" + completed
-                + "\nurgency:" + urgency
+                + "uid->" + uid
+                + "\ndescription->" + description
+                + "\ndueDate->" + dueDate
+                + "\ndueTime->" + dueTime
+                + "\ncompleted->" + completed
+                + "\nurgency->" + urgency
                 + "\n");
     }
 
@@ -74,19 +87,21 @@ public abstract class DataHandler implements Saveable, Loadable {
     private void saveHomework(FileWriter file, Task t) throws IOException {
         HashMap<String, String> fields = t.getAllFields();
         String uid = fields.get("uid");
-        String description = fields.get("description");
         String className = fields.get("className");
+        String description = fields.get("description");
         String dueDate = fields.get("dueDate");
+        String dueTime = fields.get("dueTime");
         String completed = fields.get("completed");
         String urgency = fields.get("urgency");
 
         file.write(">>>\n"
-                + "uid:" + uid
-                + "\ndescription:" + description
-                + "\nclassName:" + className
-                + "\ndueDate:" + dueDate
-                + "\ncompleted:" + completed
-                + "\nurgency:" + urgency
+                + "uid->" + uid
+                + "\nclassName->" + className
+                + "\ndescription->" + description
+                + "\ndueDate->" + dueDate
+                + "\ndueTime->" + dueTime
+                + "\ncompleted->" + completed
+                + "\nurgency->" + urgency
                 + "\n");
     }
 
@@ -125,12 +140,13 @@ public abstract class DataHandler implements Saveable, Loadable {
         hashData(hashSoFar);
     }
 
+    // REQUIRES: Keys are separated from values by "|"
     // EFFECTS: given lines that correspond to a map, creates HashMap for object then passes map to instantiate()
     private void hashData(ArrayList<String> hashLines) throws IOException {
         HashMap<String, String> map = new HashMap<>();
         if (!hashLines.isEmpty()) {
             for (String line : hashLines) {
-                String[] fragment = line.split(":");
+                String[] fragment = line.split("->");
                 ArrayList<String> keyValue = new ArrayList<>(Arrays.asList(fragment));
                 try {
                     String key = keyValue.get(0);
@@ -161,31 +177,37 @@ public abstract class DataHandler implements Saveable, Loadable {
         }
     }
 
+    // TODO: abstract instantiate by using addTask
     // MODIFIES: this
-    // EFFECTS: creates chore object from given map and adds to allChores
+    // EFFECTS: creates SINGLE chore object from given map and adds to allChores
     public void instantiateChores(HashMap<String, String> map) throws IOException {
         String description = map.get("description");
+        String dueDate = map.get("dueDate");
+        String dueTime = map.get("dueTime");
         String completed = map.get("completed");
         String uid = map.get("uid");
         String urgency = map.get("urgency");
 
-        Task t = new Chore(description, completed, uid);
+        Task t = new Chore(description, dueDate, dueTime, completed, uid);
         t.setUrgency(switchUrgency(urgency));
+        t.addObserver((Observer) this);
         allChores.add(t);
     }
 
     // MODIFIES: this
-    // EFFECTS: creates homework object from data and adds to allChores
+    // EFFECTS: creates SINGLE homework object from data and adds to allChores
     public void instantiateHomework(HashMap<String, String> map) throws IOException {
         String uid = map.get("uid");
         String description = map.get("description");
         String className = map.get("className");
         String dueDate = map.get("dueDate");
+        String dueTime = map.get("dueTime");
         String completed = map.get("completed");
         String urgency = map.get("urgency");
 
-        Task t = new Homework(className, description, dueDate, completed, uid);
+        Task t = new Homework(uid, className, description, dueDate, dueTime, completed);
         t.setUrgency(switchUrgency(urgency));
+        t.addObserver((Observer) this);
         allHomework.add(t);
     }
 
@@ -205,8 +227,23 @@ public abstract class DataHandler implements Saveable, Loadable {
     }
 
     // MODIFIES: this
+    // EFFECTS: adds new task then saves
+    protected void addTask(Task task) throws IOException {
+        switch (task.getType()) {
+            case "homework":
+                addNewHomework(task);
+                break;
+            case "chore":
+                addNewChore(task);
+                break;
+            default:
+                System.out.println("ERROR: unspecified type in addTask");
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: adds given chore to allChores and saves to file
-    public void addNewChore(Task c) throws IOException {
+    private void addNewChore(Task c) throws IOException {
         allChores.add(c);
         save(allChores);
     }
@@ -226,7 +263,7 @@ public abstract class DataHandler implements Saveable, Loadable {
 
     // MODIFIES: this
     // EFFECTS: adds given homework to allHomework and saves to file
-    void addNewHomework(Task h) throws IOException {
+    private void addNewHomework(Task h) throws IOException {
         allHomework.add(h);
         save(allHomework);
     }
@@ -243,25 +280,24 @@ public abstract class DataHandler implements Saveable, Loadable {
         }
     }
 
-    // Dont belong here
     // EFFECTS: returns a list of all current chores
-//    ArrayList<Task> getAllChores() {
-//        return allChores;
-//    }
+    ArrayList<Task> getAllChores() {
+        return allChores;
+    }
 
-//    // EFFECTS: returns a list of all current homework
-//    ArrayList<Task> getAllHomework() {
-//        return allHomework;
-//    }
+    // EFFECTS: returns a list of all current homework
+    ArrayList<Task> getAllHomework() {
+        return allHomework;
+    }
 
-//    // EFFECTS: returns list of all current tasks
-//    public ArrayList<Task> getAllTasks() {
-//        ArrayList<Task> allTasks = new ArrayList<>();
-//        allTasks.addAll(allChores);
-//        allTasks.addAll(allHomework);
-//
-//        return allTasks;
-//    }
+    // EFFECTS: returns list of all current tasks
+    public ArrayList<Task> getAllTasks() {
+        ArrayList<Task> allTasks = new ArrayList<>();
+        allTasks.addAll(allChores);
+        allTasks.addAll(allHomework);
+
+        return allTasks;
+    }
 
     // REQUIRES: a predefined iterator field that is of type int and equal to 1
     // MODIFIES: data
@@ -271,18 +307,6 @@ public abstract class DataHandler implements Saveable, Loadable {
         newFile.flush();
         return newFile;
     }
-
-    // Doesnt belong here
-//    // MODIFIES: this
-//    // EFFECTS: saves the current state of tasks in the data file then reloads the data from the file
-//    void reloadData() throws IOException {
-//        save(getAllTasks());
-//        allHomework.clear();
-//        allChores.clear();
-//
-//        load(choreFilename);
-//        load(homeworkFilename);
-//    }
 
     // MODIFIES: this
     // EFFECTS: clears all data

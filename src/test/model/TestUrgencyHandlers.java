@@ -9,6 +9,8 @@ import model.task.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUrgencyHandlers {
@@ -20,7 +22,7 @@ public class TestUrgencyHandlers {
 
     @BeforeEach
     void runBefore() {
-        task = new Chore("test");
+        task = new Chore("test", new DateTime());
         urgent = new Urgent();
         important = new Important();
         normal = new Normal();
@@ -28,7 +30,7 @@ public class TestUrgencyHandlers {
     }
 
     @Test
-    void testAddTask() {
+    void testAddTask() throws IOException {
         task.setUrgency(urgent);
         assertEquals(urgent, task.getUrgency());
 
@@ -55,7 +57,7 @@ public class TestUrgencyHandlers {
     }
 
     @Test
-    void getUrgencyString() {
+    void getUrgencyString() throws IOException {
         task.setUrgency(urgent);
         assertEquals("urgent", task.getUrgencyString());
 
