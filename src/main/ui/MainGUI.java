@@ -66,7 +66,7 @@ public class MainGUI extends Application {
         // If selected button re-clicked return to home
         if (!(currentSelected == null)) {
             if (currentSelected.equals(source)) {
-                mainScreen.toFront();
+                hideAllButMain();
                 currentSelected = null;
                 return;
             }
@@ -83,6 +83,16 @@ public class MainGUI extends Application {
         }
 
         currentSelected = source;
+    }
+
+    // EFFECTS: hides all but main
+    private void hideAllButMain() {
+        mainScreen.setVisible(true);
+        for (Node node : stackPane.getChildren()) {
+            if (!(node.equals(mainScreen))) {
+                node.setVisible(false);
+            }
+        }
     }
 
 }

@@ -27,7 +27,17 @@ public abstract class ViewController {
     public void displayOn(StackPane stackPane) {
         if (!(duplicates(stackPane))) {
             stackPane.getChildren().add(node);
+            removeAllButSelf(stackPane);
             System.out.println(stackPane.getChildrenUnmodifiable());
+        }
+    }
+
+    private void removeAllButSelf(StackPane stackPane) {
+        node.setVisible(true);
+        for (Node node : stackPane.getChildren()) {
+            if (!(node.equals(this.node))) {
+                node.setVisible(false);
+            }
         }
     }
 
