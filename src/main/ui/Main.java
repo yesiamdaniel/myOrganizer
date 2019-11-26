@@ -13,7 +13,7 @@ public class Main {
 
     private static TaskManager taskManager;
     private static Scanner scanner = new Scanner(System.in);
-    private static DateTime dateTime;
+    static DateTime dateTime;
     private static Weather weather;
     private static String city = "vancouver";
 
@@ -22,7 +22,7 @@ public class Main {
         handleInput();
     }
 
-    private static void initialize() throws IOException {
+    public static void initialize() throws IOException {
         System.out.println("Initializing...\n");
 
         taskManager = new TaskManager();

@@ -13,12 +13,15 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import ui.controllers.*;
 
-import java.awt.Button;
 import java.io.IOException;
 
 public class MainGUI extends Application {
+    private GuiElements guiElements = new GuiElements();
     public  StackPane stackPane;
     public AnchorPane mainScreen;
+
+    public Label welcomeLabel;
+    public Label dateLabel;
 
     public ToggleGroup toggleGroup;
     public ToggleButton addButton;
@@ -33,8 +36,12 @@ public class MainGUI extends Application {
     private static ViewController deleteViewController;
     private static ViewController settingsViewController;
 
-    public static void main(String[] args) {
+    public MainGUI() throws IOException {
+    }
+
+    public static void main(String[] args) throws IOException {
         launch(args);
+
     }
 
     @Override
@@ -42,16 +49,22 @@ public class MainGUI extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("MainGUI.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root));
-        instantiateFields();
+        instantiateFields(root);
+
         primaryStage.show();
     }
 
-    private void instantiateFields()  {
+    // MODIFIES: this
+    // EFFECTS: instantiates all controllers and ui elements
+    private void instantiateFields(Parent root)  {
         try {
             addViewController = new AddViewController();
             viewViewController = new ViewViewController();
             deleteViewController = new DeleteViewController();
             settingsViewController = new SettingViewController();
+
+            setDateLabel(root);
+            setTimeLabel(root);
         } catch (IOException e) {
             System.out.println("ERROR IN LOADING FIELDS");
         }
@@ -93,6 +106,16 @@ public class MainGUI extends Application {
                 node.setVisible(false);
             }
         }
+    }
+
+    private void setDateLabel(Parent root) {
+        dateLabel = (Label) root.getScene().lookup("#dateLabel");
+        dateLabel.setText(guiElements.getDate());
+    }
+
+    private void setTimeLabel(Parent root) {
+        Label timeLabel = (Label) root.getScene().lookup("#timeLabel");
+        timeLabel.setText(guiElements.getTime());
     }
 
 }

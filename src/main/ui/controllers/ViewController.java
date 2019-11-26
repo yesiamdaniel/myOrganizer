@@ -2,6 +2,7 @@ package ui.controllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import ui.Main;
 import ui.MainGUI;
@@ -27,6 +28,7 @@ public abstract class ViewController {
     public void displayOn(StackPane stackPane) {
         if (!(duplicates(stackPane))) {
             stackPane.getChildren().add(node);
+
             System.out.println(stackPane.getChildrenUnmodifiable());
         }
         removeAllButSelf(stackPane);
