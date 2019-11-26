@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DataHandler implements Saveable, Loadable {
-    protected ArrayList<Task> allChores = new ArrayList<>();
-    protected ArrayList<Task> allHomework = new ArrayList<>();
+    ArrayList<Task> allChores = new ArrayList<>();
+    ArrayList<Task> allHomework = new ArrayList<>();
 
     String choreFilename = "./data/choreData.txt";
     String homeworkFilename = "./data/homeworkData.txt";
@@ -228,7 +228,7 @@ public abstract class DataHandler implements Saveable, Loadable {
 
     // MODIFIES: this
     // EFFECTS: adds new task then saves
-    protected void addTask(Task task) throws IOException {
+    void addTask(Task task) throws IOException {
         switch (task.getType()) {
             case "homework":
                 addNewHomework(task);

@@ -25,6 +25,8 @@ public class TaskManager extends DataHandler implements Observer {
         normal = new Normal();
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads all chores from data file
     public void init() throws IOException {
         super.load(super.choreFilename);
         super.load(super.homeworkFilename);
@@ -45,7 +47,6 @@ public class TaskManager extends DataHandler implements Observer {
     // Creates and adds a task
     // MODIFIES: this
     // EFFECTS: creates a new chore and adds it  list of all current chores, saves and returns it
-    // TODO: Create observer for save to remove save call in taskmanager
     public Task create(String taskDescription, DateTime dateTime) throws IOException {
         Task newChore = new Chore(taskDescription, dateTime);
         super.addTask(newChore);
@@ -105,7 +106,7 @@ public class TaskManager extends DataHandler implements Observer {
 
 
     @Override
-    // EFFECTS: called from subject to resave all tasks
+    // EFFECTS: called from subject to re-save all tasks
     public boolean update() throws IOException {
         save(getAllTasks());
         return true;

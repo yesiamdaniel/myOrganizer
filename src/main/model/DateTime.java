@@ -35,7 +35,12 @@ public class DateTime {
             try {
                 this.time = LocalTime.parse(time, timeFormatter);
             } catch (Exception e) {
-                this.time = LocalTime.parse(time);
+                try {
+                    this.time = LocalTime.parse(time);
+                } catch (Exception q) {
+                    this.time = null;
+                }
+
             }
 
         }
@@ -98,13 +103,12 @@ public class DateTime {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE MMMM d, yyyy"));
     }
 
-    // TODO: Write tests
     // REQUIRES: date must be in form "yyyy-mm-dd"
     public void setDate(String date) {
         this.date = LocalDate.parse(date);
     }
 
-    // TODO: Write tests
+    // EFFECTS: set time to given time
     public void setTime(String time) {
         this.time = LocalTime.parse(time, timeFormatter);
     }

@@ -1,7 +1,42 @@
 >>>
-uid->CH6lTbkx
+uid->CHkNovXd
+description->Test
+dueDate->2019-11-26
+dueTime->12:20
+completed->false
+urgency->important
+>>>
+uid->CHBHgOzD
+description->Lab 11
+dueDate->2019-11-26
+dueTime->12:30
+completed->false
+urgency->urgent
+>>>
+uid->CHPA1bWr
 description->Wash dishes
-dueDate->null
-dueTime->null
+dueDate->2019-11-26
+dueTime->15:21
+completed->false
+urgency->urgent
+>>>
+uid->CHQ3Fg4X
+description->Assignment 5
+dueDate->2019-11-28
+dueTime->19:00
+completed->false
+urgency->important
+>>>
+uid->CHRWM4V7
+description->Workout
+dueDate->2019-11-26
+dueTime->19:00
+completed->false
+urgency->important
+>>>
+uid->CHP10vW9
+description->Take out garbage
+dueDate->2019-11-27
+dueTime->18:50
 completed->false
 urgency->normal

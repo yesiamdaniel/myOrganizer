@@ -17,6 +17,7 @@ public abstract class Task extends Subject implements Serializable {
     private DateTime dateTime;
     private boolean completed = false;
     private Urgency urgency;
+    public String date;
 
     private String type;
     protected String space = "   ";
@@ -91,7 +92,7 @@ public abstract class Task extends Subject implements Serializable {
     // REQUIRES: task type must be one of: chore or homework
     // MODIFIES: this
     // EFFECTS: sets the task type
-    public void setType(String type) {
+    void setType(String type) {
         this.type = type;
     }
 
@@ -138,7 +139,6 @@ public abstract class Task extends Subject implements Serializable {
     // EFFECTS: returns a list of strings with all the fields that define the task
     public abstract HashMap<String, String> getAllFields();
 
-    // TODO: heavy thrower of null pointer exception. Refactor as try catch
     // EFFECTS: creates map for date time. Helper for getAllFields.
     protected void mapDateTime(HashMap<String, String> map) {
         if (getDateTime().isDateNull()) {
@@ -154,6 +154,7 @@ public abstract class Task extends Subject implements Serializable {
         }
     }
 
+    // EFFECTS: properly formats due date
     protected String dueDateFormat() {
         if (!(getDateTime().getDate() == null)) {
             if (!(getDateTime().getTime() == null)) {

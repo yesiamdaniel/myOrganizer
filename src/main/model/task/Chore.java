@@ -21,6 +21,7 @@ public class Chore extends Task {
         createIdentifier();
         super.setType("chore");
         setDateTime(dateTime);
+        date = dateTime.getDate();
     }
 
     // Constructs chore from file
@@ -35,9 +36,11 @@ public class Chore extends Task {
 
         super.setIdentifier(uid);
         super.setType("chore");
+        date = dueDate;
     }
 
     @Override
+    // EFFECTS: create unique identifier for task
     public void createIdentifier() {
         String allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
@@ -53,6 +56,7 @@ public class Chore extends Task {
         setIdentifier(sb.toString());
     }
 
+    // EFFECTS: returns a string with task details
     public String getTaskDetails() {
         return "*Chore*\n"
                 + space + getDescription() + "\n"
@@ -62,6 +66,7 @@ public class Chore extends Task {
     }
 
     @Override
+    // EFFECTS: creates a map of all fields in order to store in file
     public HashMap<String, String> getAllFields() {
         HashMap<String, String> map = new HashMap<>();
         map.put("uid", getIdentifier());

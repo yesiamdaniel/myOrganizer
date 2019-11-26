@@ -23,6 +23,9 @@ public class Weather {
     }
 
     // Some element taken form edx edge sample
+    // REQUIRES: internet connection
+    // MODIFIES: this
+    // EFFECTS: retrives weather from openweathermap api
     public void getWeather(String location)  {
         String theURL = getOpenWeatherURL(location);
 
@@ -89,8 +92,18 @@ public class Weather {
         return  (String) weatherObject.get("description");
     }
 
+    // EFFECTS: returns a formatted string of the weather description
+    public String getWeatherDescription() {
+        return description;
+    }
+
     private String getWeatherLocation(JSONObject json) {
         return (String) json.get("name");
+    }
+
+    // EFFECTS: returns the location in which the weather is being observed
+    public String getWeatherLocation() {
+        return location;
     }
 
     private int getWeatherTemp(JSONObject json) {
@@ -99,6 +112,12 @@ public class Weather {
         return (int) Math.round(temp);
     }
 
+    // EFFECTS: returns current temp
+    public int getCurrentTemp() {
+        return currentTemp;
+    }
+
+    // EFFECTS: creates a full weather report
     public String createWeatherReport() {
         return "In " + location + ", it is currently " + currentTemp + "°C with " + description;
     }

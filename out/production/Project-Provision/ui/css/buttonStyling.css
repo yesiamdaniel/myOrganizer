@@ -1,18 +1,60 @@
-.button
+.addButton
+{
+-fx-background-color :  #1D1128 ;
+-fx-background-radius : 35 0 0 35 ;
+}
+.addButton:hover
+{
+-fx-background-color : #7D6C8D ;
+}
+.addButton:pressed
+{
+-fx-background-color : #3D2354 ;
+}
+.addButton:selected
+{
+-fx-background-color : #3D2354 ;
+}
+
+.viewButton
 {
 -fx-background-color :  #004C70 ;
 -fx-background-radius : 35 0 0 35 ;
 }
-.button:hover
+.viewButton:hover
 {
 -fx-background-color : #0093D1  ;
 }
-.button:pressed
+.viewButton:pressed
 {
 -fx-background-color : #006495 ;
 }
-.button:selected
+.viewButton:selected
 {
--fx-background-color : #006495 ;
+-fx-background-color : #3D2354 ;
 }
--fx-background-color : #0093D1 ;
+
+.createButton
+{
+-fx-background-color :  #3D2354 ;
+-fx-background-radius : 35 0 35 0 ;
+}
+.createButton:hover
+{
+-fx-background-color : #7D6C8D ;
+}
+.createButton:pressed
+{
+-fx-background-color : #1D1128 ;
+}
+.createButton:selected
+{
+-fx-background-color : #1D1128 ;
+}
+
+
+ #006495 -> light blue
+ #3D2354 -> lighter purple
+ #1D1128 -> darker purple
+ #004C70 -> darker blue
+ #7D6C8D -> very light purple

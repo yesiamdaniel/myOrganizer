@@ -6,6 +6,7 @@ public class Normal extends Urgency {
     }
 
     @Override
+    // EFFECTS: produces a string warning individual about the level of urgency the task has
     public String warn() {
         return "Regular. Finish when possible";
     }

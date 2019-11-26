@@ -15,8 +15,6 @@ public abstract class Subject {
         observerList.add(o);
     }
 
-    // TODO: sout what is changed that prompts for saving, make everything that prompts for
-    //      saving call notify
     // EFFECTS: calls observer update method
     protected void notify(Task task, String updateType) throws IOException {
         for (Observer o: observerList) {

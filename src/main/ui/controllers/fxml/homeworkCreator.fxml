@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="homeworkCreator" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="693.0" prefWidth="464.0" style="-fx-background-color: #3D2354;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AddViewController">
+   <children>
+      <VBox layoutX="216.0" layoutY="33.0" prefHeight="635.0" prefWidth="232.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="33.0">
+         <children>
+            <TextField fx:id="descriptionTextField" alignment="CENTER" prefHeight="51.0" prefWidth="293.0" promptText="Description" styleClass="addButton" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Comic Sans MS Bold Italic" size="24.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="classTextField" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="51.0" prefWidth="293.0" promptText="Class" styleClass="addButton">
+               <font>
+                  <Font name="Comic Sans MS Bold Italic" size="24.0" />
+               </font>
+            </TextField>
+            <DatePicker fx:id="datePicker" prefHeight="83.0" prefWidth="423.0" promptText="Due Date" />
+            <TextField fx:id="dueTimeTextField" layoutX="10.0" layoutY="10.0" promptText=" Due time {h:mm AM/PM}" styleClass="addButton">
+               <font>
+                  <Font name="Comic Sans MS Bold Italic" size="24.0" />
+               </font>
+            </TextField>
+            <ToggleButton fx:id="normal" mnemonicParsing="false" prefHeight="113.0" prefWidth="396.0" styleClass="createButton" stylesheets="@../../css/buttonStyling.css" text="Normal" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="36.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="toggleGroup" />
+               </toggleGroup></ToggleButton>
+            <ToggleButton fx:id="important" layoutX="10.0" layoutY="210.0" mnemonicParsing="false" prefHeight="113.0" prefWidth="392.0" styleClass="createButton" stylesheets="@../../css/buttonStyling.css" text="Important" textFill="WHITE" toggleGroup="$toggleGroup">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="36.0" />
+               </font>
+            </ToggleButton>
+            <ToggleButton fx:id="urgent" layoutX="10.0" layoutY="323.0" mnemonicParsing="false" prefHeight="113.0" prefWidth="410.0" styleClass="createButton" stylesheets="@../../css/buttonStyling.css" text="Urgent" textFill="WHITE" toggleGroup="$toggleGroup">
+               <font>
+                  <Font name="Comic Sans MS Bold" size="36.0" />
+               </font>
+            </ToggleButton>
+            <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" prefHeight="110.0" prefWidth="415.0" text="Submit" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

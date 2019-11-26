@@ -1,6 +1,8 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,17 +13,23 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import model.task.Task;
 import ui.controllers.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainGUI extends Application {
     private GuiElements guiElements = new GuiElements();
     public  StackPane stackPane;
     public AnchorPane mainScreen;
+    public ListView listView;
 
     public Label welcomeLabel;
     public Label dateLabel;
+    public Label cityNameLabel;
+    public Label tempLabel;
+    public Label weatherConditionsLabel;
 
     public ToggleGroup toggleGroup;
     public ToggleButton addButton;
@@ -65,9 +73,25 @@ public class MainGUI extends Application {
 
             setDateLabel(root);
             setTimeLabel(root);
+            setWeatherBox(root);
+            setListView(root);
         } catch (IOException e) {
             System.out.println("ERROR IN LOADING FIELDS");
         }
+    }
+
+    private void setListView(Parent root) {
+        listView = (ListView) root.lookup("#listView");
+        ObservableList<String> list = getTaskStrings();
+        listView.setItems(list);
+    }
+
+    private ObservableList<String> getTaskStrings() {
+        ObservableList<String> list = FXCollections.observableList(new ArrayList<>());
+        for (Task t : guiElements.getAllTasks()) {
+            list.add(t.getDescription());
+        }
+        return list;
     }
 
     // ActionEvent handler for buttons on main screen.
@@ -98,8 +122,9 @@ public class MainGUI extends Application {
         currentSelected = source;
     }
 
-    // EFFECTS: hides all but main
+    // EFFECTS: hides all nodes but mainScreem
     private void hideAllButMain() {
+        update();
         mainScreen.setVisible(true);
         for (Node node : stackPane.getChildren()) {
             if (!(node.equals(mainScreen))) {
@@ -117,5 +142,20 @@ public class MainGUI extends Application {
         Label timeLabel = (Label) root.getScene().lookup("#timeLabel");
         timeLabel.setText(guiElements.getTime());
     }
+
+    private void setWeatherBox(Parent root) {
+        cityNameLabel = (Label) root.getScene().lookup("#cityNameLabel");
+        tempLabel = (Label) root.getScene().lookup("#tempLabel");
+        weatherConditionsLabel = (Label) root.getScene().lookup("#weatherConditionsLabel");
+
+        cityNameLabel.setText(guiElements.getCity());
+        tempLabel.setText(guiElements.getTemp() + "°C");
+        weatherConditionsLabel.setText("with\n" + guiElements.getWeatherConditions());
+    }
+
+    private void update() {
+        listView.setItems(getTaskStrings());
+    }
+
 
 }

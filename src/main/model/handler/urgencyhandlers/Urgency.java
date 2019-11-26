@@ -26,6 +26,8 @@ public abstract class Urgency {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes task from urgency handler and removes urgency handler from task
     public void removeTask(Task t) {
         tasks.remove(t);
         t.removeUrgency();

@@ -11,6 +11,7 @@ public class Urgent extends Urgency  {
     }
 
     @Override
+    // EFFECTS: produces a string warning individual about the level of urgency the task has
     public String warn() {
         return "URGENT, FINISH IMMEDIATELY";
     }

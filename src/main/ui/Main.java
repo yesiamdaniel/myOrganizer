@@ -22,7 +22,7 @@ public class Main {
         handleInput();
     }
 
-    public static void initialize() throws IOException {
+    private static void initialize() throws IOException {
         System.out.println("Initializing...\n");
 
         taskManager = new TaskManager();

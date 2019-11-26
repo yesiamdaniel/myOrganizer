@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +19,7 @@
                <children>
                   <VBox layoutX="7.0" layoutY="161.0" prefHeight="309.0" prefWidth="253.0" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="161.0">
                      <children>
-                        <ToggleButton fx:id="addButton" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="button" stylesheets="@css/buttonStyling.css" text="Add" textFill="WHITE">
+                        <ToggleButton fx:id="addButton" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="addButton" stylesheets="@css/buttonStyling.css" text="Add" textFill="WHITE">
                            <toggleGroup>
                               <ToggleGroup fx:id="toggleGroup" />
                            </toggleGroup>
@@ -26,17 +27,17 @@
                               <Font name="Ink Free" size="36.0" />
                            </font>
                         </ToggleButton>
-                        <ToggleButton fx:id="viewButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="button" stylesheets="@css/buttonStyling.css" text="View" textFill="WHITE" toggleGroup="$toggleGroup">
+                        <ToggleButton fx:id="viewButton" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="viewButton" stylesheets="@css/buttonStyling.css" text="View" textFill="WHITE" toggleGroup="$toggleGroup" visible="false">
                            <font>
                               <Font name="Ink Free" size="36.0" />
                            </font>
                         </ToggleButton>
-                        <ToggleButton fx:id="deleteButton" layoutX="10.0" layoutY="93.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="button" stylesheets="@css/buttonStyling.css" text="Delete" textFill="WHITE" toggleGroup="$toggleGroup">
+                        <ToggleButton fx:id="deleteButton" disable="true" layoutX="10.0" layoutY="93.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="viewButton" stylesheets="@css/buttonStyling.css" text="Delete" textFill="WHITE" toggleGroup="$toggleGroup" visible="false">
                            <font>
                               <Font name="Ink Free" size="36.0" />
                            </font>
                         </ToggleButton>
-                        <ToggleButton fx:id="settingsButton" layoutX="10.0" layoutY="176.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="button" stylesheets="@css/buttonStyling.css" text="Settings" textFill="WHITE" toggleGroup="$toggleGroup">
+                        <ToggleButton fx:id="settingsButton" disable="true" layoutX="10.0" layoutY="176.0" mnemonicParsing="false" onAction="#presentView" prefHeight="70.0" prefWidth="297.0" styleClass="viewButton" stylesheets="@css/buttonStyling.css" text="Settings" textFill="WHITE" toggleGroup="$toggleGroup" visible="false">
                            <font>
                               <Font name="Ink Free" size="36.0" />
                            </font>
@@ -57,16 +58,16 @@
                <children>
                   <StackPane fx:id="stackPane" prefWidth="718.0" style="-fx-background-color: #006495;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane fx:id="mainScreen" style="-fx-background-color: #006495;">
+                        <AnchorPane id=" #006495" fx:id="mainScreen" style="-fx-background-color: #006495;">
                            <children>
-                              <AnchorPane layoutX="180.0" layoutY="129.0" prefHeight="200.0" prefWidth="427.0" AnchorPane.bottomAnchor="364.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="129.0">
+                              <AnchorPane layoutX="119.0" layoutY="129.0" prefHeight="202.0" prefWidth="570.0" style="-fx-background-color: #004C70; -fx-border-color: #FFFFFF;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="120.0">
                                  <children>
                                     <Label id="dateLabel" fx:id="dateLabel" alignment="CENTER" layoutX="21.0" layoutY="100.0" text="Wednesday November  26, 2019" textFill="WHITE" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
                                        <font>
                                           <Font name="Comic Sans MS Bold Italic" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="133.0" layoutY="35.0" text="Welcome!" textFill="WHITE" AnchorPane.bottomAnchor="114.0" AnchorPane.leftAnchor="133.0" AnchorPane.rightAnchor="132.0" AnchorPane.topAnchor="35.0">
+                                    <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="135.0" layoutY="5.0" prefHeight="83.0" prefWidth="320.0" text="Welcome!" textFill="WHITE" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="134.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="4.0">
                                        <font>
                                           <Font name="Comic Sans MS Bold Italic" size="36.0" />
                                        </font>
@@ -76,6 +77,49 @@
                                           <Font name="Comic Sans MS" size="24.0" />
                                        </font>
                                     </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="65.0" layoutY="357.0" prefHeight="271.0" prefWidth="300.0" style="-fx-background-color: #1D1128; -fx-border-color: #FFFFFF;" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="65.0">
+                                 <children>
+                                    <VBox spacing="35.0" style="-fx-background-color: #004C70;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Label id="cityNameLabel" fx:id="cityNameLabel" alignment="CENTER" prefHeight="37.0" prefWidth="300.0" text="In &lt;City_Name&gt;" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold Italic" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="tempLabel" fx:id="tempLabel" alignment="CENTER" prefHeight="93.0" prefWidth="298.0" text="&lt;temp&gt;" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold Italic" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label id="weatherConditionsLabel" fx:id="weatherConditionsLabel" alignment="CENTER" prefHeight="216.0" prefWidth="298.0" text="&lt;WeatherConditions" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets top="20.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="421.0" layoutY="367.0" prefHeight="271.0" prefWidth="300.0" style="-fx-background-color: #004C70; -fx-border-color: #FFFFFF;" AnchorPane.bottomAnchor="55.0" AnchorPane.rightAnchor="65.0">
+                                 <children>
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="37.0" prefWidth="300.0" text="CurrentTasks" textFill="WHITE">
+                                             <font>
+                                                <Font name="Comic Sans MS Bold Italic" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <ListView fx:id="listView" prefHeight="216.0" prefWidth="298.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets top="20.0" />
+                                       </padding>
+                                    </VBox>
                                  </children>
                               </AnchorPane>
                            </children>
