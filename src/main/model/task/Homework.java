@@ -57,8 +57,6 @@ public class Homework extends Task {
                 + space + "Urgency: " + getUrgency().warn();
     }
 
-
-
     @Override
     public HashMap<String, String> getAllFields() {
         HashMap<String, String> map = new HashMap<>();

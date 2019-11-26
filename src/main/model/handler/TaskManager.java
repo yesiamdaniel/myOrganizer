@@ -12,10 +12,9 @@ import model.task.Task;
 import model.TooManyIncompleteException;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TaskManager extends DataHandler implements Observer {
+    // TODO: make tm iterable
     static Urgent urgent;
     static Important important;
     static Normal normal;
@@ -106,9 +105,9 @@ public class TaskManager extends DataHandler implements Observer {
 
 
     @Override
-    // EFFECTS: subject(task) has changed notifies observer(this) to resave all tasks
+    // EFFECTS: called from subject to resave all tasks
     public boolean update() throws IOException {
-        save(getAllChores());
+        save(getAllTasks());
         return true;
     }
 }

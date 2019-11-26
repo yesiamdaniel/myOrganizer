@@ -107,6 +107,7 @@ public class Main {
         int taskNumber = 1;
         String lineSeparator = lineSeparators();
 
+        // TODO: iterator here
         for (Task t : taskManager.getAllTasks()) {
             if (taskNumber == 1) {
                 System.out.println(lineSeparator);
@@ -275,18 +276,31 @@ public class Main {
         while (true) {
             System.out.println("Which task would you like to delete?");
             viewAllTasks();
-            int taskIndexToDelete = Integer.parseInt(scanner.nextLine()) - 1;
-
-            if (0 <= taskIndexToDelete && taskIndexToDelete < taskManager.getAllTasks().size()) {
-                Task taskToDelete = taskManager.getAllTasks().get(taskIndexToDelete);
-                if (confirmDelete(taskToDelete)) {
-                    taskManager.delete(taskToDelete);
-                    break;
-                }
-            } else {
-                System.out.println("Task number entered is out of range!");
+            String userInput = scanner.nextLine();
+            if (userInput.equals("q")) {
+                break;
+            }
+            Task taskToDelete = validTaskToDeleteInput(userInput);
+            if (confirmDelete(taskToDelete)) {
+                taskManager.delete(taskToDelete);
+                break;
             }
         }
+    }
+
+    private static Task validTaskToDeleteInput(String userInput) throws IOException {
+        Task taskToReturn = null;
+        try {
+            int taskIndexToDelete = Integer.parseInt(userInput) - 1;
+            taskToReturn = taskManager.getAllTasks().get(taskIndexToDelete);
+        } catch (NumberFormatException e) {
+            System.out.println("Input is not a number! Try again.");
+            deletePrompt();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Task number entered is out of range! Try again.");
+            deletePrompt();
+        }
+        return taskToReturn;
     }
 
     // Affirms deletion with user
