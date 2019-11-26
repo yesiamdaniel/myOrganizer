@@ -1,26 +1,37 @@
 package ui;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.w3c.dom.html.HTMLOptGroupElement;
+import ui.controllers.*;
 
-import java.beans.EventHandler;
+import java.awt.Button;
 import java.io.IOException;
-import java.util.List;
 
 public class MainGUI extends Application {
-    public StackPane stackPane;
-    private boolean toggle = true;
-    public Button addButton;
+    public  StackPane stackPane;
+    public AnchorPane mainScreen;
 
+    public ToggleGroup toggleGroup;
+    public ToggleButton addButton;
+    public ToggleButton viewButton;
+    public ToggleButton deleteButton;
+    public ToggleButton settingsButton;
+
+    private ToggleButton currentSelected;
+
+    private static ViewController addViewController;
+    private static ViewController viewViewController;
+    private static ViewController deleteViewController;
+    private static ViewController settingsViewController;
 
     public static void main(String[] args) {
         launch(args);
@@ -31,26 +42,47 @@ public class MainGUI extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("MainGUI.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root));
+        instantiateFields();
         primaryStage.show();
-
     }
 
+    private void instantiateFields()  {
+        try {
+            addViewController = new AddViewController();
+            viewViewController = new ViewViewController();
+            deleteViewController = new DeleteViewController();
+            settingsViewController = new SettingViewController();
+        } catch (IOException e) {
+            System.out.println("ERROR IN LOADING FIELDS");
+        }
+    }
+
+    // ActionEvent handler for buttons on main screen.
+    //EFFECTS: presents respective view over stack pane
     @FXML
-    private void test() throws IOException {
-        System.out.println("pressed");
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("replacement.fxml"));
-        AnchorPane anchorPane = loader.load();
+    public void presentView(ActionEvent actionEvent) throws IOException {
+        ToggleButton source = (ToggleButton) actionEvent.getSource();
 
-        int size = stackPane.getChildren().size();
-
-        if (toggle) {
-            stackPane.getChildren().add(anchorPane);
-            toggle = false;
-        } else {
-            stackPane.getChildren().remove(size - 1);
-            toggle = true;
+        // If selected button re-clicked return to home
+        if (!(currentSelected == null)) {
+            if (currentSelected.equals(source)) {
+                mainScreen.toFront();
+                currentSelected = null;
+                return;
+            }
         }
 
+        if (addButton.equals(source)) {
+            addViewController.displayOn(stackPane);
+        } else if (viewButton.equals(source)) {
+            viewViewController.displayOn(stackPane);
+        } else if (deleteButton.equals(source)) {
+            deleteViewController.displayOn(stackPane);
+        } else if (settingsButton.equals(source)) {
+            settingsViewController.displayOn(stackPane);
+        }
+
+        currentSelected = source;
     }
+
 }
